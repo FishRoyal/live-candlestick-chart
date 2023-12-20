@@ -22,7 +22,7 @@ export type CandleX = CandleData & {
 export type CandlesXData = {
     x: d3.ScaleTime<number, number, never>,
     candle_width: number,
-    candle_width_visible_part: number,
+    candle_width_with_gap: number,
     xAxis: d3.Axis<d3.AxisDomain> & ((domainValue: d3.AxisDomain, index: number) => string),
     candlesWithXCoord: CandleX[]
 }
