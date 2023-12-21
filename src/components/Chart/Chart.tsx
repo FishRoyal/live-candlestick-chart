@@ -8,6 +8,17 @@ import { getVisibleCandles } from "./D3/drawPack/utils/getVisibleCandles";
 import { getYScale } from "./D3/drawPack/workers/YScale/getYScale";
 import { drawRoundedRect } from "./D3/drawPack/utils/drawCandle";
 import { drawLine } from "./D3/drawPack/utils/drawLine";
+import { drawCurveThroughPoints } from "./D3/drawPack/utils/drawBezier";
+import { animateImage } from "./D3/drawPack/utils/animateImage";
+
+const chart_dimentions = {
+    width: 1500,
+    height: 500
+}
+
+const deafault_candles_amount_on_screen = chart_dimentions.width / 20;
+const zoom = 1;
+const gap = 5;
 
 const Chart = () => {
     
@@ -17,8 +28,8 @@ const Chart = () => {
     useEffect(() => {
         const canvas = d3.select(d3Container.current)
             .append('canvas')
-            .attr('width', 500)
-            .attr('height', 300);
+            .attr('width', chart_dimentions.width)
+            .attr('height', chart_dimentions.height);
 
         const context = canvas?.node()?.getContext('2d');
 
@@ -28,10 +39,10 @@ const Chart = () => {
         
         const customBase = document.createElement('custom');
         const custom = d3.select(customBase);
-        const {candle_width, candle_width_with_gap, candlesWithXCoord, x, xAxis} = countXData(candlesData.pair, 300);
+        const {candle_width, candle_width_with_gap, candlesWithXCoord, x, xAxis} = countXData(candlesData.pair, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap);
 
         //counts visible range + padding from current transform
-        const xRange = getXVisibleRangeWithPadding(0, 500, 50);
+        const xRange = getXVisibleRangeWithPadding(0, 1000, 50);
 
         //left candles, which x coordinate is in xRange
         let visCandles = getVisibleCandles(candlesWithXCoord, xRange, 0)
@@ -72,33 +83,41 @@ const Chart = () => {
             .attr('x1', d => d.x + candle_width/2)
             .attr('x2', d => d.x + candle_width/2)
             .attr('y1', d => {
-                console.log(y(d.high))
                 return y(d.high)
             })
             .attr('y2', d => y(d.low))
             .attr('strokeFill', '#C6C6CA')
 
-        const lines = custom.selectAll('custom.line')
-        lines.each(function(d, i) {
-            const node = d3.select(this);
-            const x1 = parseInt(node.attr('x1'));
-            const x2 = parseInt(node.attr('x2'));
-            const y1 = parseInt(node.attr('y1'));
-            const y2 = parseInt(node.attr('y2'));
-            drawLine(x1, y1, x2, y2, node.attr('strokeFill'), 1, context)
+        const image = new Image();
+        image.src = "/img/moon.png";
+
+        const points_for_moon_path_top = candlesWithXCoord.map((d, inx) => {
+            return { 
+                x: d.x + candle_width/2 ,
+                y: y(d.high) 
+            }
         })
-
-        const rects = custom.selectAll('custom.rect')
-
-        rects.each(function(d, i) {
-            const node = d3.select(this);
-            const x = parseInt(node.attr('x'));
-            const y = parseInt(node.attr('y'));
-            const width = parseInt(node.attr('width'));
-            const height = parseInt(node.attr('height'));
-            drawRoundedRect(x, y, width, height, 2, context, node.attr('strokeFill'), node.attr('fillStyle'));
+        const points_for_moon_path_left_corner = candlesWithXCoord.map((d, inx) => {
+            return { 
+                x: d.x ,
+                y: d.enterPrice > d.currentPrice ? y(d.enterPrice) : y(d.currentPrice) 
+            }
         })
-
+        const points_for_moon_path_right_corver = candlesWithXCoord.map((d, inx) => {
+            return { 
+                x: d.x + candle_width,
+                y: d.enterPrice > d.currentPrice ? y(d.enterPrice)  : y(d.currentPrice) 
+            }
+        })
+        const points_for_moon_path = [...points_for_moon_path_top, ...points_for_moon_path_left_corner, ...points_for_moon_path_right_corver];
+        points_for_moon_path.sort((a, b) => a.x - b.x);
+        drawCurveThroughPoints(points_for_moon_path, "white", 1, context);
+        image.onload = function() {
+            animateImage(context, chart_dimentions.width, chart_dimentions.height, points_for_moon_path, image, custom);
+        };
+      
+          // Function to get a point on the curve based on time (t)
+          
         
 
     }, [d3Container, canvasRef])
