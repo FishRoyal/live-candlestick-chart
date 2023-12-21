@@ -111,13 +111,15 @@ const Chart = () => {
         })
         const points_for_moon_path = [...points_for_moon_path_top, ...points_for_moon_path_left_corner, ...points_for_moon_path_right_corver];
         points_for_moon_path.sort((a, b) => a.x - b.x);
-        drawCurveThroughPoints(points_for_moon_path, "white", 1, context);
+    
+        
         image.onload = function() {
             animateImage(context, chart_dimentions.width, chart_dimentions.height, points_for_moon_path, image, custom);
         };
       
           // Function to get a point on the curve based on time (t)
           
+        
         
 
     }, [d3Container, canvasRef])
