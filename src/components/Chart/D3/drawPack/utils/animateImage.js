@@ -1,4 +1,3 @@
-import  { drawCurveThroughPoints } from "./drawCurveThougPoints"
 import { getPointOnCurve } from "./getPoinOnCurve"
 import { draw } from"../../draw"
 export function animateImage(context, width, height, points, image, custom) {
@@ -10,7 +9,7 @@ export function animateImage(context, width, height, points, image, custom) {
     draw(custom, context);
 
     // Calculate the position on the curve based on time
-    const t = (Date.now() % 150000) / 150000; // Cycle every 5 seconds
+    const t = (Date.now() % 100000) / 100000; // Cycle every 5 seconds
     const pointOnCurve = getPointOnCurve(points, t);
     // Draw the image at the calculated position
     context.drawImage(image, pointOnCurve.x - 16.5, pointOnCurve.y - 33, 33, 33);

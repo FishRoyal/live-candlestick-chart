@@ -12,7 +12,8 @@ export type CandleData = {
     low: number,
     exitPrice: number, //if 0 then not closed
     type: string,
-    candlesWithXCoord?: number
+    candlesWithXCoord?: number,
+    currentTimestamp: number
 }
 
 export type CandleX = CandleData & {
