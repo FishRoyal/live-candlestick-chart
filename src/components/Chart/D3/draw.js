@@ -8,6 +8,7 @@ import { getYScale } from "./drawPack/workers/YScale/getYScale";
 import * as d3 from "d3"
 import { drawXAxis } from "./drawPack/workers/XScaleTime/drawXAxis";
 import { drawYAxis } from "./drawPack/workers/YScale/drawYAxis";
+import { drawCurrent } from "./drawPack/workers/CurrentPrice/drawCurrent";
 
 export function draw(custom, context, zoom, gap, chart_dimentions, candles, deafault_candles_amount_on_screen, transform) {
     const {candle_width, candle_width_with_gap, candlesWithXCoord, x} = countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform);
@@ -31,6 +32,7 @@ export function draw(custom, context, zoom, gap, chart_dimentions, candles, deaf
 
     drawXAxis(context, x, chart_dimentions.height, candle_width);
     drawYAxis(context, y, chart_dimentions.height, chart_dimentions.width);
+    drawCurrent(context, y(candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice), candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width, 2);
 
     rectsInput
         .join(
