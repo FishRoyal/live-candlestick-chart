@@ -7,12 +7,13 @@ import { getYScale } from "./drawPack/workers/YScale/getYScale";
 
 import * as d3 from "d3"
 import { drawXAxis } from "./drawPack/workers/XScaleTime/drawXAxis";
+import { drawYAxis } from "./drawPack/workers/YScale/drawYAxis";
 
 export function draw(custom, context, zoom, gap, chart_dimentions, candles, deafault_candles_amount_on_screen, transform) {
     const {candle_width, candle_width_with_gap, candlesWithXCoord, x} = countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform);
 
     //counts visible range + padding from current transform
-    const xRange = getXVisibleRangeWithPadding(0, 1000, 0);
+    const xRange = getXVisibleRangeWithPadding(0, 1000, -10);
 
     //left candles, which x coordinate is in xRange
     let visCandles = getVisibleCandles(candlesWithXCoord, xRange, 0)
@@ -28,7 +29,8 @@ export function draw(custom, context, zoom, gap, chart_dimentions, candles, deaf
     const rectsInput = custom.selectAll('custom.rect')
             .data(candlesWithXCoord)
 
-    drawXAxis(context, x, chart_dimentions.height, candle_width)
+    drawXAxis(context, x, chart_dimentions.height, candle_width);
+    drawYAxis(context, y, chart_dimentions.height, chart_dimentions.width);
 
     rectsInput
         .join(
