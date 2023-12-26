@@ -43,7 +43,6 @@ const Chart = () => {
             if(d3Container.current !== null) {
                 try {
                     const newCandle = lastMessage;
-                    console.log(newCandle)
                     if("symbol" in newCandle) {
                         let newData = [...candles.history];
                         if(newCandle.candleId === newData[newData.length - 1].candleId) {
@@ -54,6 +53,7 @@ const Chart = () => {
                             newData.shift();
                             newData.push(newCandleModified);
                         }
+                        console.log("ASDAS ", newData[newData.length - 1]);
                         dispatch(setHistory(newData));
                         dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap)))
                     }

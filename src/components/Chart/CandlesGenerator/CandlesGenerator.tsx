@@ -2,29 +2,20 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { setLastMessage } from "../../../reduxStorage/candles/candles";
 import { CandleData } from "../../../reduxStorage/candles/candleType";
-import { RootReducer } from "../../../reduxStorage/configureStore";
 import { generateArrayFromCandles } from "./GenerateNormalDistributions";
 
-export function CandlesGenerator() {
+export function CandlesGenerator({candles}: {candles: CandleData[]}) {
     const dispatch = useDispatch();
-    const candles = useSelector((storage: RootReducer) => storage.candles.history)
-    const [doExec, setDoExec] = useState(false);
     const lastCandle = useRef<null | CandleData>(null)
     const i = useRef<number>(0);
 
     useEffect(() => {
-        if(!doExec && candles !== null) {
-            setDoExec(true)
-        }
-    }, [candles])
-
-    useEffect(() => {
-        if(!doExec || candles === null) return;
         const distribution = generateArrayFromCandles(candles);
         lastCandle.current = JSON.parse(JSON.stringify(candles[candles.length - 1]));
 
         setInterval(() => {     
             if(lastCandle.current === null || !distribution) return;  
+            console.log(i.current)
             const randomIndex = Math.floor(Math.random() * distribution.length);
             let chosenDelta = distribution[randomIndex];
             let newCandle = JSON.parse(JSON.stringify(lastCandle.current));
@@ -42,7 +33,7 @@ export function CandlesGenerator() {
                 newCandle.currentPrice = newCandle.exitPrice;
                 newCandle.exitPrice = 0;
             }
-            if(i.current % 59 === 0) {
+            if((i.current + 1) % 60 === 0) {
                 newCandle.exitPrice = newCandle.currentPrice;
                 newCandle.endTimestamp = newCandle.currentTimestamp;
             }
@@ -55,10 +46,11 @@ export function CandlesGenerator() {
                 newCandle.high = newCandle.currentPrice;
             }
             lastCandle.current = newCandle;
+            console.log("WHITS NEW: ", newCandle)
             dispatch(setLastMessage(newCandle))
             i.current++;
         }, 1000)
-    }, [doExec])
+    }, [])
 
     return (
         <></>
