@@ -1,10 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as d3 from "d3";
 import candlesData from "./data.json";
 import { countXData } from "./dataHook";
-import { getXVisibleRangeWithPadding } from "./D3/drawPack/utils/getXVisibleRangeWithPadding";
-import { getVisibleCandles } from "./D3/drawPack/utils/getVisibleCandles";
-import { getYScale } from "./D3/drawPack/workers/YScale/getYScale";
 import { useDispatch, useSelector } from "react-redux";
 import { RootReducer } from "../../reduxStorage/configureStore";
 import { setHistory, setXData } from "../../reduxStorage/candles/candles";
@@ -16,7 +13,6 @@ const chart_dimentions = {
 }
 
 const deafault_candles_amount_on_screen = chart_dimentions.width / 15;
-let zoom = 1;
 const gap = 5;
 
 const Chart = () => {
@@ -26,6 +22,8 @@ const Chart = () => {
     const candles = useSelector((storage: RootReducer) => storage.candles);
     const dispatch = useDispatch();
     const customBase = useRef<null | HTMLElement>(null);
+    const [zoom, setZoom] = useState(1);
+    const [transform, setTransform] = useState(0);
 
     useEffect(() => {
         dispatch(setHistory(candlesData.pair));
@@ -38,7 +36,7 @@ const Chart = () => {
     useEffect(() => {
         const lastMessage = candles.lastMessage;
         if(candles.history === null) return;
-        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap)));
+        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform)));
         if(lastMessage !== null && candles !== null) {
             if(d3Container.current !== null) {
                 try {
@@ -53,9 +51,8 @@ const Chart = () => {
                             newData.shift();
                             newData.push(newCandleModified);
                         }
-                        console.log("ASDAS ", newData[newData.length - 1]);
                         dispatch(setHistory(newData));
-                        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap)))
+                        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform)))
                     }
                 } catch(e) {
                     console.log(e);
@@ -77,97 +74,62 @@ const Chart = () => {
         }
 
         const custom = d3.select(customBase.current);
-        const {candle_width, candle_width_with_gap, candlesWithXCoord, x, xAxis} = countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap);
-
-        //counts visible range + padding from current transform
-        const xRange = getXVisibleRangeWithPadding(0, 1000, 50);
-
-        //left candles, which x coordinate is in xRange
-        let visCandles = getVisibleCandles(candlesWithXCoord, xRange, 0)
-
-        //if nothing is visible, do nothing
-        if(visCandles.length === 0) {
-            visCandles = candlesWithXCoord.slice(candlesWithXCoord.length - 7)
-        }
-
-        //gets current yScale for visible interval of candles
-        const y = getYScale(visCandles, 300, [0, 0])
-
+        
+        draw(custom, context, zoom, gap, chart_dimentions, candles, deafault_candles_amount_on_screen, transform);
         
 
-        const image = new Image();
-        image.src = "/img/moon.png";
+        // const image = new Image();
+        // image.src = "/img/moon.png";
 
-        const points_for_moon_path_top = candlesWithXCoord.map((d, inx) => {
-            return { 
-                x: d.x + candle_width/2 ,
-                y: y(d.high) 
-            }
-        })
-        const points_for_moon_path_left_corner = candlesWithXCoord.map((d, inx) => {
-            return { 
-                x: d.x ,
-                y: d.enterPrice > d.currentPrice ? y(d.enterPrice) : y(d.currentPrice) 
-            }
-        })
-        const points_for_moon_path_right_corver = candlesWithXCoord.map((d, inx) => {
-            return { 
-                x: d.x + candle_width,
-                y: d.enterPrice > d.currentPrice ? y(d.enterPrice)  : y(d.currentPrice) 
-            }
-        })
-        const points_for_moon_path = [...points_for_moon_path_top, ...points_for_moon_path_left_corner, ...points_for_moon_path_right_corver];
-        points_for_moon_path.sort((a, b) => a.x - b.x);
-    
-        context.clearRect(0, 0, chart_dimentions.width, chart_dimentions.height);
+        // const points_for_moon_path_top = candlesWithXCoord.map((d, inx) => {
+        //     return { 
+        //         x: d.x + candle_width/2 ,
+        //         y: y(d.high) 
+        //     }
+        // })
+        // const points_for_moon_path_left_corner = candlesWithXCoord.map((d, inx) => {
+        //     return { 
+        //         x: d.x ,
+        //         y: d.enterPrice > d.currentPrice ? y(d.enterPrice) : y(d.currentPrice) 
+        //     }
+        // })
+        // const points_for_moon_path_right_corver = candlesWithXCoord.map((d, inx) => {
+        //     return { 
+        //         x: d.x + candle_width,
+        //         y: d.enterPrice > d.currentPrice ? y(d.enterPrice)  : y(d.currentPrice) 
+        //     }
+        // })
+        // points_for_moon_path.current = [...points_for_moon_path_top, ...points_for_moon_path_left_corner, ...points_for_moon_path_right_corver];
+        // points_for_moon_path.current.sort((a, b) => a.x - b.x);
 
-    // Draw the curve through points
-    // drawCurveThroughPoints(points, "blue", 2, context);
-        draw(custom, context, y, candle_width, candlesWithXCoord);
-        // image.onload = function() {
-        //     animateImage(context, chart_dimentions.width, chart_dimentions.height, points_for_moon_path, image, custom);
-        // };          
+        // animateImage(context, chart_dimentions.width, chart_dimentions.height, {points: points_for_moon_path.current}, image, custom, animationRecursive.current);         
         
-    }, [candles.xData, d3Container, canvasRef])
+    }, [candles.xData, d3Container, canvasRef, zoom])
 
-    // useEffect(() => {
-    //     const context = canvasRef.current?.node()?.getContext('2d');
+    useEffect(() => {
+        if(canvasRef.current === null) return;
+        const zoom = d3.zoom()
+            .scaleExtent([0.9, 2])
+            .on('zoom', (event) => {
+                const transform = event.transform;
+                setZoom(transform.k)
+            })
 
-    //     if(!context || canvasRef.current === null || candles.history === null) {
-    //         return;
-    //     }
-    //     const {candle_width, candle_width_with_gap, candlesWithXCoord, x, xAxis} = countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / 1, gap);
+        canvasRef.current
+            .call(zoom as any)
+    }, [canvasRef.current])
 
-    //     const xRange = getXVisibleRangeWithPadding(0, 1000, 50);
+    useEffect(() => {
+        if(canvasRef.current === null) return;
+        const transform = d3.drag()
+            .on('drag', (event) => {
+                const transform = event.transform;
+                setTransform(transform.x)
+            })
 
-    //     //left candles, which x coordinate is in xRange
-    //     let visCandles = getVisibleCandles(candlesWithXCoord, xRange, 0)
-
-    //     //if nothing is visible, do nothing
-    //     if(visCandles.length === 0) {
-    //         visCandles = candlesWithXCoord.slice(candlesWithXCoord.length - 7)
-    //     }
-
-    //     //gets current yScale for visible interval of candles
-    //     const y = getYScale(visCandles, 300, [0, 0]);
-
-    //     const zoom = d3.zoom()
-    //         .on('zoom', (event) => {
-    //             const transform = event.transform;
-    //             console.log("HERE IS ZOONNNN")
-    //             // Clear the canvas
-    //             context.clearRect(0, 0, chart_dimentions.width, chart_dimentions.height);
-
-    //             // Apply the zoom transform to the canvas context
-    //             context.setTransform(transform.k, 0, 0, transform.k, transform.x, transform.y);
-    //             const custom = d3.select(customBase.current)
-    //             // Redraw the data on the canvas
-    //             draw(custom, context, y, candle_width, candlesWithXCoord);
-    //         })
-
-    //     canvasRef.current
-    //         .call(zoom as any)
-    // }, [])
+        canvasRef.current
+            .call(transform as any)
+    }, [canvasRef.current])
 
 
 

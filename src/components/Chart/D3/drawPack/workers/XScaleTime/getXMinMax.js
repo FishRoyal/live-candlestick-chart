@@ -1,6 +1,5 @@
-import * as d3 from "d3"
 
-export function getXAxis(xScale, intervalTick, height) {
+export function getStartXEndX(xScale, intervalTick, height) {
     let [min, max] = xScale.domain();
     const tickAmount = xScale.range()[1]/intervalTick;
     let tickTimeMS = Math.round((max - min)/tickAmount);
@@ -29,11 +28,5 @@ export function getXAxis(xScale, intervalTick, height) {
         }
     }
 
-    const axis = d3.axisBottom(xScale)
-                .tickSizeOuter(0)
-                .tickSizeInner(height - 30)
-                .tickValues(d3.range(min, max, tickTimeMS*1000))
-                .tickFormat(d3.timeFormat("%H:%M:%S"))
-
-    return axis;
+    return [min, max, tickTimeMS];
 }

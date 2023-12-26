@@ -1,10 +1,34 @@
 import { drawLine} from "./drawPack/utils/drawLine";
 import { drawRoundedRect } from "./drawPack/utils/drawCandle";
-import * as d3 from "d3"
+import { countXData } from "../dataHook";
+import { getXVisibleRangeWithPadding } from "./drawPack/utils/getXVisibleRangeWithPadding";
+import { getVisibleCandles } from "./drawPack/utils/getVisibleCandles";
+import { getYScale } from "./drawPack/workers/YScale/getYScale";
 
-export function draw(custom, context, y, candle_width, candlesWithXCoord) {
+import * as d3 from "d3"
+import { drawXAxis } from "./drawPack/workers/XScaleTime/drawXAxis";
+
+export function draw(custom, context, zoom, gap, chart_dimentions, candles, deafault_candles_amount_on_screen, transform) {
+    const {candle_width, candle_width_with_gap, candlesWithXCoord, x} = countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform);
+
+    //counts visible range + padding from current transform
+    const xRange = getXVisibleRangeWithPadding(0, 1000, 0);
+
+    //left candles, which x coordinate is in xRange
+    let visCandles = getVisibleCandles(candlesWithXCoord, xRange, 0)
+
+    //if nothing is visible, do nothing
+    if(visCandles.length === 0) {
+        visCandles = candlesWithXCoord.slice(candlesWithXCoord.length - 7)
+    }
+
+    //gets current yScale for visible interval of candles
+    const y = getYScale(visCandles, chart_dimentions.height, [20, 20])
+    context.clearRect(0, 0, chart_dimentions.width, chart_dimentions.height);
     const rectsInput = custom.selectAll('custom.rect')
             .data(candlesWithXCoord)
+
+    drawXAxis(context, x, chart_dimentions.height, candle_width)
 
     rectsInput
         .join(

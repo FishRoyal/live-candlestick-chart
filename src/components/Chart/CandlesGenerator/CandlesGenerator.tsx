@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from "react";
+import { useDispatch } from "react-redux";
 import { setLastMessage } from "../../../reduxStorage/candles/candles";
 import { CandleData } from "../../../reduxStorage/candles/candleType";
 import { generateArrayFromCandles } from "./GenerateNormalDistributions";
