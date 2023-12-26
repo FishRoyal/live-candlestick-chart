@@ -8,8 +8,8 @@ import { setHistory, setXData } from "../../reduxStorage/candles/candles";
 import { draw } from "./D3/draw";
 
 const chart_dimentions = {
-    width: 1500,
-    height: 500
+    width: window.innerWidth - 240,
+    height: 600
 }
 
 const deafault_candles_amount_on_screen = chart_dimentions.width / 15;
