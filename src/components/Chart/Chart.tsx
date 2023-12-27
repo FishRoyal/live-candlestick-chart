@@ -7,6 +7,8 @@ import useProcessMessages from "./ChartHooks/UseProcessMessages";
 import useCountYScale from "./ChartHooks/UseCountYScale";
 import useD3BindDataProcess from "./D3/UseD3BindDataProcess";
 import useCountMoonPoints from "../MoonTextGenerator/useCountMoonPoints";
+import useChartZoom from "./ChartHooks/UseChartZoom";
+import useChartTransform from "./ChartHooks/UseChartTransform";
 
 const chart_dimentions = {
     width: window.innerWidth - 300,
@@ -21,8 +23,6 @@ const Chart = () => {
     const d3Container = useRef(null);
     const candles = useSelector((storage: RootReducer) => storage.candles);
     const customBase = useRef<null | HTMLElement>(null);
-    const [zoom, setZoom] = useState(1);
-    const transform = useRef(0);
 
     const canvasRef = useInitial({
         chart_dimentions, 
@@ -30,6 +30,8 @@ const Chart = () => {
         customBase
     });
 
+    const transform = useChartTransform({canvasRef});
+    const zoom = useChartZoom({canvasRef});
     const context = canvasRef.current?.node()?.getContext('2d');
 
 
@@ -53,7 +55,8 @@ const Chart = () => {
         customBase,
         y,
         candle_width: candles.xData?.candle_width,
-        chart_dimentions
+        chart_dimentions,
+        transform
     })
 
     const points = useCountMoonPoints({
@@ -76,6 +79,7 @@ const Chart = () => {
                     x={candles.xData.x}
                     y={y}
                     points={points}
+                    transform={transform}
                 /> 
                 : null
             }

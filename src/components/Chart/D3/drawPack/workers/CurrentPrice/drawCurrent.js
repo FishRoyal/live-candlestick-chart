@@ -1,6 +1,6 @@
 import * as d3 from "d3";
 
-export function drawCurrent(custom, context, lastPrice, lastPriceVal, width, accuracy) {
+export function drawCurrent(custom, context, lastPriceVal, width) {
     const flag_data = {
         width: 65,
         height: 25,

@@ -7,6 +7,7 @@ import { drawYAxis } from "../D3/drawPack/workers/YScale/drawYAxis";
 import { drawCurrent } from "../D3/drawPack/workers/CurrentPrice/drawCurrent";
 import { CandleX } from "../../../reduxStorage/candles/candleType";
 import { getPointOnCurve } from "../D3/drawPack/utils/getPoinOnCurve";
+import { transform } from "typescript";
 
 export type DataForRender = {
     context: CanvasRenderingContext2D,
@@ -19,10 +20,11 @@ export type DataForRender = {
         width: number
     },
     candlesWithXCoord: CandleX[],
-    points: {x: number, y: number}[]
+    points: {x: number, y: number}[],
+    transform: number
 }
 
-const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCoord, candle_width, points}: DataForRender) => {
+const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCoord, candle_width, points, transform}: DataForRender) => {
 
     const image = useRef(new Image());
     image.current.src = "/img/moon.png";
@@ -34,9 +36,9 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
         const renderLoop = () => {
             context.clearRect(0, 0, chart_dimentions.width, chart_dimentions.height)
             
-            drawXAxis(context, x, chart_dimentions.height, candle_width);
+            drawXAxis(context, x, chart_dimentions.height, candle_width, transform);
             drawYAxis(context, y, chart_dimentions.height, chart_dimentions.width);
-            drawCurrent(custom, context, y(candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice), candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width, 2);
+            drawCurrent(custom, context, candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width);
             
             const lines = custom.selectAll('custom.line')
             lines.each(function(d, i) {
@@ -77,7 +79,7 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             cancelAnimationFrame(req);
         };
 
-      }, [context, customBase.current, x, y, chart_dimentions, candlesWithXCoord, candle_width, points]);
+      }, [context, customBase.current, x, y, chart_dimentions, candlesWithXCoord, candle_width, points, transform]);
 
     return (
         <></>

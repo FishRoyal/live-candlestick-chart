@@ -14,7 +14,7 @@ const useProcessMessages = ({candles, d3Container, chart_dimentions, deafault_ca
     deafault_candles_amount_on_screen: number,
     zoom: number,
     gap: number,
-    transform: React.MutableRefObject<number>
+    transform: number
 }) => {
     
     const dispatch = useDispatch();
@@ -22,7 +22,7 @@ const useProcessMessages = ({candles, d3Container, chart_dimentions, deafault_ca
     useEffect(() => {
         const lastMessage = candles.lastMessage;
         if(candles.history === null) return;
-        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform.current)));
+        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform)));
         if(lastMessage !== null && candles !== null) {
             if(d3Container.current !== null) {
                 try {
@@ -38,7 +38,7 @@ const useProcessMessages = ({candles, d3Container, chart_dimentions, deafault_ca
                             newData.push(newCandleModified);
                         }
                         dispatch(setHistory(newData));
-                        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform.current)))
+                        dispatch(setXData(countXData(candles.history, chart_dimentions.height, chart_dimentions.width, deafault_candles_amount_on_screen / zoom, gap, transform)))
                     }
                 } catch(e) {
                     console.log(e);
@@ -46,7 +46,7 @@ const useProcessMessages = ({candles, d3Container, chart_dimentions, deafault_ca
             }
             
         }
-    }, [candles.lastMessage, d3Container.current]);
+    }, [candles.lastMessage, d3Container.current, zoom, transform]);
 }
 
 export default useProcessMessages;

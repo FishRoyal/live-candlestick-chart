@@ -1,10 +1,9 @@
 import { getStartXEndX } from "./getXMinMax"
 import * as d3 from "d3"
 
-export function drawXAxis(context, xScale, height, candle_width) {
+export function drawXAxis(context, xScale, height, candle_width, transform) {
 
     const [startX, endX, tickTimeMS] = getStartXEndX(xScale, 50, height);
-    
     
     let tickSize = 6,
         xTicks = d3.range(startX, endX, tickTimeMS*1000), 
@@ -16,16 +15,9 @@ export function drawXAxis(context, xScale, height, candle_width) {
 
     context.beginPath();
     xTicks.forEach(d => {
-        context.moveTo(xScale(d) + candle_width / 2, 8);
-        context.lineTo(xScale(d) + candle_width / 2, height - 8 - tickSize);
+        context.moveTo(xScale(d) + candle_width / 2 + transform, 8);
+        context.lineTo(xScale(d) + candle_width / 2 + transform, height - 8 - tickSize);
     });
-    context.stroke();
-
-    context.beginPath();
-    context.moveTo(startX, Y + tickSize);
-    context.lineTo(startX, Y);
-    context.lineTo(endX, Y);
-    context.lineTo(endX, Y + tickSize);
     context.stroke();
 
     context.textAlign = "center";
@@ -34,7 +26,7 @@ export function drawXAxis(context, xScale, height, candle_width) {
 
     xTicks.forEach(d => {
         context.beginPath();
-        context.fillText(xTickFormat(d), xScale(d) + candle_width / 2, height - 5 - tickSize);
+        context.fillText(xTickFormat(d), xScale(d) + candle_width / 2 + transform, height - 5 - tickSize);
     });
 
 }

@@ -1,6 +1,7 @@
 import { useEffect } from "react"
 import * as d3 from "d3"; 
-const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width, chart_dimentions}) => {
+
+const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width, chart_dimentions, transform}) => {
 
     useEffect(() => {
         if(!customBase.current || !candlesWithXCoord || !y || !candle_width) return;
@@ -127,11 +128,32 @@ const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width, c
                         })
                 }
             )
-
-
         
+        // const xTicks = custom.selectAll('xTicks.tick')
+        //     .data(candlesWithXCoord)
 
-        
+        // xTicks
+        //     join(
+        //         enter => {
+        //             return enter
+        //                 .append('xTicks')
+        //                 .attr('class', 'tick')
+        //                 .transition()
+        //                 .duration()
+        //                 .attr('x', d => {
+        //                     return d.x + transform
+        //                 })
+        //         },
+        //         update => {
+        //             return update
+        //                 .transition()
+        //                 .duration()
+        //                 .attr('x', d => {
+        //                     return d.x + transform
+        //                 })
+        //         }
+        //     )
+
     }, [customBase.current, candlesWithXCoord, y])
    
 }
