@@ -36,7 +36,7 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             
             drawXAxis(context, x, chart_dimentions.height, candle_width);
             drawYAxis(context, y, chart_dimentions.height, chart_dimentions.width);
-            drawCurrent(context, y(candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice), candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width, 2);
+            drawCurrent(custom, context, y(candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice), candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width, 2);
             
             const lines = custom.selectAll('custom.line')
             lines.each(function(d, i) {
@@ -60,6 +60,7 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             })
             req = requestAnimationFrame(renderLoop);
 
+            //moon render
             const t = (Date.now() % 100000) / 100000; 
             const pointOnCurve = getPointOnCurve(points, t);
             context.save();
@@ -75,6 +76,7 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
         return () => {
             cancelAnimationFrame(req);
         };
+
       }, [context, customBase.current, x, y, chart_dimentions, candlesWithXCoord, candle_width, points]);
 
     return (

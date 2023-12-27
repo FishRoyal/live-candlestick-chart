@@ -52,7 +52,8 @@ const Chart = () => {
         candlesWithXCoord: candles.xData?.candlesWithXCoord,
         customBase,
         y,
-        candle_width: candles.xData?.candle_width
+        candle_width: candles.xData?.candle_width,
+        chart_dimentions
     })
 
     const points = useCountMoonPoints({

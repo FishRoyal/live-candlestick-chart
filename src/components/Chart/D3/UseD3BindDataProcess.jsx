@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import * as d3 from "d3"; 
-const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width}) => {
+const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width, chart_dimentions}) => {
 
     useEffect(() => {
         if(!customBase.current || !candlesWithXCoord || !y || !candle_width) return;
@@ -30,6 +30,8 @@ const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width}) 
                         .attr('x', function(d) {
                             return d.x;
                         })
+                        .transition()
+                        .duration(!candlesWithXCoord[candlesWithXCoord.length - 1].isnew ? 200 : 0)
                         .attr('y', d => d.enterPrice > d.currentPrice? y(d.enterPrice) : y(d.currentPrice))
                         .attr('fillStyle', d => d.enterPrice > d.currentPrice ? '#2d2f31': '#C6C6CA')
                         .attr('strokeFill', '#C6C6CA')
@@ -62,6 +64,8 @@ const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width}) 
                     return update
                         .attr('x1', d => d.x + candle_width/2)
                         .attr('x2', d => d.x + candle_width/2)
+                        .transition()
+                        .duration(!candlesWithXCoord[candlesWithXCoord.length - 1].isnew ? 200 : 0)
                         .attr('y1', d => {
                             return y(d.high)
                         })
@@ -69,6 +73,65 @@ const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width}) 
                         .attr('strokeFill', '#C6C6CA')
                 }
             )
+
+        const currentPrice = custom.selectAll('currentPrice.line')
+            .data([candlesWithXCoord[candlesWithXCoord.length - 1]])
+
+        currentPrice
+            .join(
+                enter => {
+                    return enter
+                        .append('currentPrice')
+                        .attr('class', 'line')
+                        .attr('x1',0)
+                        .attr('x2', chart_dimentions.width - 65)
+                        .transition()
+                        .duration(200)
+                        .attr('y1', d => {
+                            return y(d.currentPrice)
+                        })
+                        .attr('y2', d => y(d.currentPrice))
+                },
+                update => {
+                    return update
+                        .transition()
+                        .duration(200)
+                        .attr('y1', d => {
+                            return y(d.currentPrice)
+                        })
+                        .attr('y2', d => y(d.currentPrice))
+                }
+            )
+
+        const currentPriceFlag = custom.selectAll('currentPrice.flag')
+            .data([candlesWithXCoord[candlesWithXCoord.length - 1]])
+
+        currentPriceFlag
+            .join(
+                enter => {
+                    return enter
+                        .append('currentPrice')
+                        .attr('class', 'flag')
+                        .transition()
+                        .duration(200)
+                        .attr('y', d => {
+                            return y(d.currentPrice)
+                        })
+                },
+                update => {
+                    return update
+                        .transition()
+                        .duration(200)
+                        .attr('y', d => {
+                            return y(d.currentPrice)
+                        })
+                }
+            )
+
+
+        
+
+        
     }, [customBase.current, candlesWithXCoord, y])
    
 }

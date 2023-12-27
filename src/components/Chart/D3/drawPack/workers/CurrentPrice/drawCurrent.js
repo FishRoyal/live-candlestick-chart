@@ -1,6 +1,6 @@
-import * as d3 from "d3"
+import * as d3 from "d3";
 
-export function drawCurrent(context, lastPrice, lastPriceVal, width, accuracy) {
+export function drawCurrent(custom, context, lastPrice, lastPriceVal, width, accuracy) {
     const flag_data = {
         width: 65,
         height: 25,
@@ -11,21 +11,34 @@ export function drawCurrent(context, lastPrice, lastPriceVal, width, accuracy) {
     
     context.strokeStyle = "#5A5B5D";
     
-    context.beginPath();
-    context.moveTo(0, lastPrice);
-    context.lineTo(width - flag_data.width, lastPrice);
-    context.stroke();
+    const currentPriceLine = custom.selectAll('currentPrice.line')
+    currentPriceLine.each(function(d, i) {
+        const node = d3.select(this);
+        const x1 = parseInt(node.attr('x1'));
+        const x2 = parseInt(node.attr('x2'));
+        const y1 = parseInt(node.attr('y1'));
+        const y2 = parseInt(node.attr('y2'));
+        context.beginPath();
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.stroke();
+    })
+    
+    const currentPriceFlag = custom.selectAll('currentPrice.flag');
 
-    context.save();
-    context.translate(width - flag_data.width, lastPrice - flag_data.height / 2); // Move the path to the new position
-    context.beginPath();
-    const path = new Path2D(flag_data.path);
-    context.fill(path);
-    context.stroke();
-    context.restore();
-
-    context.fillStyle = "#2d2f31"
-    context.beginPath();
-    context.fillText(lastPriceVal.toFixed(2), width - 10, lastPrice);
+    currentPriceFlag.each(function(d, i) {
+        const node = d3.select(this);
+        const y = parseInt(node.attr('y'));
+        context.save();
+        context.translate(width - flag_data.width, y - flag_data.height / 2); // Move the path to the new position
+        context.beginPath();
+        const path = new Path2D(flag_data.path);
+        context.fill(path);
+        context.stroke();
+        context.restore();
+        context.fillStyle = "#2d2f31"
+        context.beginPath();
+        context.fillText(lastPriceVal.toFixed(2), width - 10, y);
+    })
 
 }

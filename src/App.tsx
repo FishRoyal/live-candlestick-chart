@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import "./App.sass";
 import { CandlesGenerator } from './components/Chart/CandlesGenerator/CandlesGenerator';
 import Chart from './components/Chart/Chart';
+import Logo from './components/Logo/Logo';
 import MoonTextGenerator from './components/MoonTextGenerator/MoonTextGenerator';
 import { RootReducer } from './reduxStorage/configureStore';
 
@@ -13,6 +14,7 @@ function App() {
         <MoonTextGenerator />
         <Chart />
         {candles !== null ? <CandlesGenerator candles={candles}/> : null}
+        <Logo />
     </div>
   );
 }
