@@ -46,7 +46,6 @@ export function CandlesGenerator({candles}: {candles: CandleData[]}) {
                 newCandle.high = newCandle.currentPrice;
             }
             lastCandle.current = newCandle;
-            console.log("WHITS NEW: ", newCandle)
             dispatch(setLastMessage(newCandle))
             i.current++;
         }, 1000)

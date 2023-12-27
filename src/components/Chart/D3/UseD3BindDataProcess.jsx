@@ -2,7 +2,6 @@ import { useEffect } from "react"
 import * as d3 from "d3"; 
 
 const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width, chart_dimentions, transform}) => {
-
     useEffect(() => {
         if(!customBase.current || !candlesWithXCoord || !y || !candle_width) return;
         const custom = d3.select(customBase.current);
