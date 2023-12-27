@@ -1,7 +1,6 @@
 {
   "name": "live-candlestick-chart",
   "version": "0.1.0",
-  "homepage": "https://fishroyal.github.io/live-candlestick-chart/",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.0.1",

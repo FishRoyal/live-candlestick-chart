@@ -27,7 +27,7 @@ export type DataForRender = {
 const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCoord, candle_width, points, transform}: DataForRender) => {
 
     const image = useRef(new Image());
-    image.current.src = "/img/moon.png";
+    image.current.src = "/live-candlestick-chart/img/moon.png";
 
     useEffect(() => {
         const custom = d3.select(customBase.current);
