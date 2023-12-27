@@ -63,10 +63,10 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             const t = (Date.now() % 100000) / 100000; 
             const pointOnCurve = getPointOnCurve(points, t);
             context.save();
-            context.translate(chart_dimentions.width / 2, chart_dimentions.height / 2);
-            context.rotate(t);
-            context.drawImage(image.current, pointOnCurve.x - 16.5, pointOnCurve.y - 33, 33, 33);
-            context.setTransform(1, 0, 0, 1, 0, 0);
+            context.translate(pointOnCurve.x, pointOnCurve.y - 16.5);
+            context.rotate(t * 10 * Math.PI);
+            context.drawImage(image.current, -16.5, -16.5, 33, 33);
+            context.translate(-pointOnCurve.x,  -pointOnCurve.y + 16.5);
             context.restore();
         };
     
