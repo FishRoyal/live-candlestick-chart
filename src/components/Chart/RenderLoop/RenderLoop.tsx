@@ -63,7 +63,7 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             req = requestAnimationFrame(renderLoop);
 
             //moon render
-            const t = (Date.now() % 100000) / 100000; 
+            const t = (Date.now() % 100000) / 1400 / candlesWithXCoord.length; 
             const pointOnCurve = getPointOnCurve(points, t);
             context.save();
             context.translate(pointOnCurve.x, pointOnCurve.y - 16.5);

@@ -10,14 +10,14 @@ const useChartTransform = ({canvasRef}: {
         if(canvasRef.current === null ) return;
         const drag = d3.drag()
             .on("drag", function(event) {
-                setTransform(prev => prev + event.dx)
+                setTransform(prev => prev + event.dx <= 10 ? prev + event.dx : prev)
             })
         canvasRef.current
             .call(drag as any)
 
     }, [canvasRef.current])
 
-    return transform
+    return [transform, setTransform]
 }
 
 export default useChartTransform;

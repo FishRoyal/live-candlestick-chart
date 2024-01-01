@@ -43,10 +43,12 @@ I present to your attention a candlestick chart that works using d3.js, canvas, 
 It's not all. There are some things to do, such as:
 
 - [ ] Crosshairs
-- [ ] Ensure efficient loading of candles from the left
+- [x] Ensure efficient loading of candles from the left
 - [ ] Ensure smooth vertical movement of the moon when yScale changes during drag-event
 - [ ] Provide ticks on the xAxis to the right of candles
 - [ ] Provide a mobile version
+- [ ] The moon should not teleport after attaching a date to the left
+- [ ] When inactive in a tabbed state, the app should not hang after a while
 
 ### Thank you!
 If you like this project or interested in it, then I'm glad :)

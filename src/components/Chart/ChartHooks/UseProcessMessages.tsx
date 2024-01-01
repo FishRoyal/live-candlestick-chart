@@ -34,7 +34,7 @@ const useProcessMessages = ({candles, d3Container, chart_dimentions, deafault_ca
                             newData[newData.length - 1] = newCandleModified;
                         } else {
                             const newCandleModified = {...newCandle, isnew: true };
-                            newData.shift();
+                            // newData.shift();
                             newData.push(newCandleModified);
                         }
                         dispatch(setHistory(newData));

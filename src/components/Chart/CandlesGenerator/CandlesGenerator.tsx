@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { setLastMessage } from "../../../reduxStorage/candles/candles";
 import { CandleData } from "../../../reduxStorage/candles/candleType";
-import { generateArrayFromCandles } from "./GenerateNormalDistributions";
+import { generateArrayFromCandles } from "./GenerateDistribution";
 
 export function CandlesGenerator({candles}: {candles: CandleData[]}) {
     const dispatch = useDispatch();
@@ -15,7 +15,6 @@ export function CandlesGenerator({candles}: {candles: CandleData[]}) {
 
         setInterval(() => {     
             if(lastCandle.current === null || !distribution) return;  
-            console.log(i.current)
             const randomIndex = Math.floor(Math.random() * distribution.length);
             let chosenDelta = distribution[randomIndex];
             let newCandle = JSON.parse(JSON.stringify(lastCandle.current));

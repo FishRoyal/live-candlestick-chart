@@ -30,12 +30,12 @@ const useD3BindDataProcess = ({customBase, candlesWithXCoord, y, candle_width, c
                         .attr('x', function(d) {
                             return d.x;
                         })
+                        .attr('width', candle_width)
                         .transition()
                         .duration(!candlesWithXCoord[candlesWithXCoord.length - 1].isnew ? 200 : 0)
                         .attr('y', d => d.enterPrice > d.currentPrice? y(d.enterPrice) : y(d.currentPrice))
                         .attr('fillStyle', d => d.enterPrice > d.currentPrice ? '#2d2f31': '#C6C6CA')
                         .attr('strokeFill', '#C6C6CA')
-                        .attr('width', candle_width)
                         .attr('height', d => {
                             return Math.abs(y(d.enterPrice) - y(d.currentPrice))
                         })
