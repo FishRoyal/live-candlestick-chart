@@ -7,7 +7,6 @@ import { drawYAxis } from "../D3/drawPack/workers/YScale/drawYAxis";
 import { drawCurrent } from "../D3/drawPack/workers/CurrentPrice/drawCurrent";
 import { CandleX } from "../../../reduxStorage/candles/candleType";
 import { getPointOnCurve } from "../D3/drawPack/utils/getPoinOnCurve";
-import { transform } from "typescript";
 
 export type DataForRender = {
     context: CanvasRenderingContext2D,
@@ -65,12 +64,14 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             //moon render
             const t = (Date.now() % 100000) / 1400 / candlesWithXCoord.length; 
             const pointOnCurve = getPointOnCurve(points, t);
-            context.save();
-            context.translate(pointOnCurve.x, pointOnCurve.y - 16.5);
-            context.rotate(t * 10 * Math.PI);
-            context.drawImage(image.current, -16.5, -16.5, 33, 33);
-            context.translate(-pointOnCurve.x,  -pointOnCurve.y + 16.5);
-            context.restore();
+            if(pointOnCurve) {
+                context.save();
+                context.translate(pointOnCurve.x, pointOnCurve.y - 16.5);
+                context.rotate(t * 10 * Math.PI);
+                context.drawImage(image.current, -16.5, -16.5, 33, 33);
+                context.translate(-pointOnCurve.x,  -pointOnCurve.y + 16.5);
+                context.restore();
+            }
 
         };
     

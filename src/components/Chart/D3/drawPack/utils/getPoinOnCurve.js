@@ -8,6 +8,7 @@ export function getPointOnCurve(points, t) {
     const p1 = points[index];
     const p2 = points[Math.min(n, index + 1)];
     const p3 = points[Math.min(n, index + 2)];
+    if(!p0 || !p1 || !p2 || !p3) return undefined;
 
     const u2 = u * u;
     const u3 = u * u2;
