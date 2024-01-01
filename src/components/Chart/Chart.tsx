@@ -12,7 +12,7 @@ import useChartTransform from "./ChartHooks/UseChartTransform";
 import useExtendData from "./ChartHooks/UseExtendData";
 
 const chart_dimentions = {
-    width: window.innerWidth - 300,
+    width: window.innerWidth >= 700 ? window.innerWidth - 300 : window.innerWidth - 20,
     height: window.innerHeight - 400
 }
 
