@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/live-candlestick-chart/static/css/main.adc95f9c.css",
-    "main.js": "/live-candlestick-chart/static/js/main.9678b495.js",
+    "main.css": "/live-candlestick-chart/static/css/main.4bccda19.css",
+    "main.js": "/live-candlestick-chart/static/js/main.79aba361.js",
     "index.html": "/live-candlestick-chart/index.html",
-    "main.adc95f9c.css.map": "/live-candlestick-chart/static/css/main.adc95f9c.css.map",
-    "main.9678b495.js.map": "/live-candlestick-chart/static/js/main.9678b495.js.map"
+    "main.4bccda19.css.map": "/live-candlestick-chart/static/css/main.4bccda19.css.map",
+    "main.79aba361.js.map": "/live-candlestick-chart/static/js/main.79aba361.js.map"
   },
   "entrypoints": [
-    "static/css/main.adc95f9c.css",
-    "static/js/main.9678b495.js"
+    "static/css/main.4bccda19.css",
+    "static/js/main.79aba361.js"
   ]
 }
