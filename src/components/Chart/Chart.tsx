@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootReducer } from "../../reduxStorage/configureStore";
 import RenderLoop from "./RenderLoop/RenderLoop";
@@ -35,6 +35,11 @@ const Chart = () => {
     const zoom = useChartZoom({canvasRef});
     const context = canvasRef.current?.node()?.getContext('2d');
 
+    // useEffect(() => {
+    //     if(context) {
+    //         context.scale(scale, scale)
+    //     }
+    // }, [context])
 
     useProcessMessages({
         candles,

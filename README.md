@@ -49,6 +49,7 @@ It's not all. There are some things to do, such as:
 - [ ] Provide a mobile version
 - [ ] The moon should not teleport after attaching a date to the left
 - [x] Make sure that the application does not freeze if transferred to the active tab
+- [ ] Solve quality problem on mobile
 
 ### Thank you!
 If you like this project or interested in it, then I'm glad :)

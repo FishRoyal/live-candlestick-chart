@@ -6,7 +6,7 @@ import { CandlesGenerator } from './components/Chart/CandlesGenerator/CandlesGen
 import Chart from './components/Chart/Chart';
 import Logo from './components/Logo/Logo';
 import MoonTextGenerator from './components/MoonTextGenerator/MoonTextGenerator';
-import { setHistory, setToDeafulState } from './reduxStorage/candles/candles';
+import { setToDeafulState } from './reduxStorage/candles/candles';
 import { RootReducer } from './reduxStorage/configureStore';
 import { setVisibility } from './reduxStorage/visibility/visibility';
 
