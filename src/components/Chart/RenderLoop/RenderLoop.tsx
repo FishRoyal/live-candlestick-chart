@@ -61,6 +61,7 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             })
             req = requestAnimationFrame(renderLoop);
 
+            drawCurrent(custom, context, candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width);
             //moon render
             const t = (Date.now() % 100000) / 1400 / candlesWithXCoord.length; 
             const pointOnCurve = getPointOnCurve(points, t);
@@ -71,7 +72,6 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             context.translate(-pointOnCurve.x,  -pointOnCurve.y + 16.5);
             context.restore();
 
-            drawCurrent(custom, context, candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width);
         };
     
         renderLoop();

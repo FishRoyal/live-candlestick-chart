@@ -27,12 +27,17 @@ const candles = createSlice({
             type: string
         }) {
             state.xData = action.payload
+        },
+        setToDeafulState(state) {
+            state.lastMessage = {} as CandleData;
+            state.history = null;
+            state.xData = null;
         }
     },
     name: 'state'
 })
 
 
-export const {setLastMessage, setHistory, setXData} = candles.actions;
+export const {setLastMessage, setHistory, setXData, setToDeafulState} = candles.actions;
 
 export default candles.reducer;

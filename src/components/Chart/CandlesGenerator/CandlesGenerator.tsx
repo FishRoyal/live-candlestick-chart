@@ -12,14 +12,13 @@ export function CandlesGenerator({candles}: {candles: CandleData[]}) {
     useEffect(() => {
         const distribution = generateArrayFromCandles(candles);
         lastCandle.current = JSON.parse(JSON.stringify(candles[candles.length - 1]));
+        i.current = 0;
 
-        setInterval(() => {     
+        const intervalFunction = () => {     
             if(lastCandle.current === null || !distribution) return;  
             const randomIndex = Math.floor(Math.random() * distribution.length);
             let chosenDelta = distribution[randomIndex];
             let newCandle = JSON.parse(JSON.stringify(lastCandle.current));
-
-         
             newCandle.currentPrice = newCandle.currentPrice + chosenDelta;
             if (i.current % 60 === 0) {
                 newCandle.low = newCandle.exitPrice;
@@ -47,7 +46,12 @@ export function CandlesGenerator({candles}: {candles: CandleData[]}) {
             lastCandle.current = newCandle;
             dispatch(setLastMessage(newCandle))
             i.current++;
-        }, 1000)
+        }
+        const interval = setInterval(intervalFunction, 1000)
+
+        return () => {
+            clearInterval(interval)
+        }
     }, [])
 
     return (

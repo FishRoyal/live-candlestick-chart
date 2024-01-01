@@ -25,8 +25,7 @@ const useInitial = ({chart_dimentions, d3Container, customBase}: {
         canvasRef.current = d3.select(d3Container.current)
             .append('canvas')
             .attr('width', chart_dimentions.width)
-            .attr('height', chart_dimentions.height)
-            .attr('trm', 23)
+            .attr('height', chart_dimentions.height);
 
     }, []) 
 
