@@ -37,7 +37,8 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             context.clearRect(0, 0, chart_dimentions.width, chart_dimentions.height)
             
             drawXAxis(context, x, chart_dimentions.height, candle_width, transform);
-            
+            drawYAxis(context, y, chart_dimentions.height, chart_dimentions.width);
+
             const lines = custom.selectAll('custom.line')
             lines.each(function(d, i) {
                 const node = d3.select(this);
@@ -70,7 +71,6 @@ const RenderLoop = ({context, customBase, x, y, chart_dimentions, candlesWithXCo
             context.translate(-pointOnCurve.x,  -pointOnCurve.y + 16.5);
             context.restore();
 
-            drawYAxis(context, y, chart_dimentions.height, chart_dimentions.width);
             drawCurrent(custom, context, candlesWithXCoord[candlesWithXCoord.length - 1].currentPrice, chart_dimentions.width);
         };
     

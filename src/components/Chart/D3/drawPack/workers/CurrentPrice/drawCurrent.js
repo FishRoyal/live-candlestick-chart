@@ -10,7 +10,8 @@ export function drawCurrent(custom, context, lastPriceVal, width) {
     }
     
     context.strokeStyle = "#5A5B5D";
-    
+    context.fillStyle = "#c6c6ca";
+
     const currentPriceLine = custom.selectAll('currentPrice.line')
     currentPriceLine.each(function(d, i) {
         const node = d3.select(this);
