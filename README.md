@@ -48,7 +48,7 @@ It's not all. There are some things to do, such as:
 - [ ] Provide ticks on the xAxis to the right of candles
 - [ ] Provide a mobile version
 - [ ] The moon should not teleport after attaching a date to the left
-- [ ] When inactive in a tabbed state, the app should not hang after a while
+- [ ] Make sure that the application does not freeze if transferred to the active tab
 
 ### Thank you!
 If you like this project or interested in it, then I'm glad :)
