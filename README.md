@@ -49,4 +49,3 @@ It's not all. There are some things to do, such as:
 - [ ] Solve quality problem on mobile
 
 ### Thank you!
-If you like this project or interested in it, then I'm glad :)
